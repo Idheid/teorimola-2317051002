@@ -1,36 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/screens/home_screen.dart';
 import 'package:myapp/screens/login_screen.dart';
-import 'package:myapp/screens/music_screen.dart';
-import 'package:myapp/screens/notes_screen.dart';
-import 'package:myapp/screens/profile_screen.dart';
-import 'package:myapp/screens/schedule_screen.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: const MyApp(),
-    ),
-  );
-}
-
-class ThemeProvider with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
-
-  ThemeMode get themeMode => _themeMode;
-
-  void toggleTheme() {
-    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    notifyListeners();
-  }
-
-  void setSystemTheme() {
-    _themeMode = ThemeMode.system;
-    notifyListeners();
-  }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,132 +11,90 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const MaterialColor primarySeedColor = Colors.deepPurple;
-
-    final TextTheme appTextTheme = TextTheme(
-      displayLarge: GoogleFonts.oswald(fontSize: 57, fontWeight: FontWeight.bold),
-      titleLarge: GoogleFonts.lato(fontSize: 22, fontWeight: FontWeight.w500),
-      bodyMedium: GoogleFonts.openSans(fontSize: 14),
-    );
-
-    final ThemeData lightTheme = ThemeData(
+    // TEMA UTAMA APLIKASI
+    final ThemeData theme = ThemeData(
       useMaterial3: true,
+      primaryColor: const Color(0xFF3A82F8),
+      scaffoldBackgroundColor: const Color(0xFFF8F9FA),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: primarySeedColor,
-        brightness: Brightness.light,
+        seedColor: const Color(0xFF3A82F8),
+        primary: const Color(0xFF3A82F8),
+        secondary: const Color(0xFF00BFA5),
+        background: const Color(0xFFF8F9FA),
+        error: const Color(0xFFD32F2F),
       ),
-      textTheme: appTextTheme,
-      appBarTheme: AppBarTheme(
-        backgroundColor: primarySeedColor,
-        foregroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.oswald(fontSize: 24, fontWeight: FontWeight.bold),
+
+      // TEMA TEKS DENGAN GOOGLE FONTS
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.plusJakartaSans(fontSize: 57, fontWeight: FontWeight.bold),
+        displayMedium: GoogleFonts.plusJakartaSans(fontSize: 45, fontWeight: FontWeight.bold),
+        displaySmall: GoogleFonts.plusJakartaSans(fontSize: 36, fontWeight: FontWeight.bold),
+        headlineLarge: GoogleFonts.plusJakartaSans(fontSize: 32, fontWeight: FontWeight.w600),
+        headlineMedium: GoogleFonts.plusJakartaSans(fontSize: 28, fontWeight: FontWeight.w600),
+        headlineSmall: GoogleFonts.plusJakartaSans(fontSize: 24, fontWeight: FontWeight.w600),
+        titleLarge: GoogleFonts.plusJakartaSans(fontSize: 22, fontWeight: FontWeight.w500),
+        titleMedium: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.w500),
+        titleSmall: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w500),
+        bodyLarge: GoogleFonts.plusJakartaSans(fontSize: 16),
+        bodyMedium: GoogleFonts.plusJakartaSans(fontSize: 14),
+        bodySmall: GoogleFonts.plusJakartaSans(fontSize: 12),
+        labelLarge: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.bold),
+        labelMedium: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.bold),
+        labelSmall: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.bold),
       ),
+
+      // TEMA ELEVATED BUTTON
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF3A82F8),
           foregroundColor: Colors.white,
-          backgroundColor: primarySeedColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w500),
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
-    );
 
-    final ThemeData darkTheme = ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: primarySeedColor,
-        brightness: Brightness.dark,
+      // TEMA INPUT DECORATION (UNTUK TEXTFIELD)
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: const Color(0xFFFFFFFF),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF3A82F8), width: 2),
+        ),
+        labelStyle: GoogleFonts.plusJakartaSans(color: Colors.grey.shade600),
+        hintStyle: GoogleFonts.plusJakartaSans(color: Colors.grey.shade500),
       ),
-      textTheme: appTextTheme,
+
+      // TEMA APP BAR
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.grey[900],
-        foregroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.oswald(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.black,
-          backgroundColor: primarySeedColor.shade200,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w500),
+        backgroundColor: const Color(0xFFF8F9FA),
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        shadowColor: Colors.black.withOpacity(0.1),
+        iconTheme: const IconThemeData(color: Color(0xFF3A82F8)),
+        titleTextStyle: GoogleFonts.plusJakartaSans(
+          color: const Color(0xFF1D2939),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
 
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return MaterialApp(
-          title: 'Study Buddy',
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: themeProvider.themeMode,
-          home: const LoginScreen(),
-        );
-      },
-    );
-  }
-}
-
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    NotesScreen(),
-    ScheduleScreen(),
-    MusicScreen(),
-    ProfileScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note),
-            label: 'Catatan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Jadwal',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.music_note),
-            label: 'Musik',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
-      ),
+    return MaterialApp(
+      title: 'Study Buddy',
+      theme: theme,
+      home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

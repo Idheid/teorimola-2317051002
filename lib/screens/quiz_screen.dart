@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/screens/quiz_result_screen.dart'; // Impor layar hasil
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -9,106 +9,134 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  int _selectedAnswer = 0;
+  final List<Map<String, dynamic>> _questions = [
+    {
+      'questionText': 'Apa konsep utama yang menjelaskan bagaimana dua gelombang cahaya dapat bergabung untuk menciptakan pola terang dan gelap?',
+      'answers': [
+        {'text': 'Difraksi', 'isCorrect': false},
+        {'text': 'Refraksi', 'isCorrect': false},
+        {'text': 'Interferensi', 'isCorrect': true},
+        {'text': 'Polarisasi', 'isCorrect': false},
+      ],
+    },
+  ];
+
+  int _questionIndex = 0;
+  int? _selectedIndex;
+  bool? _isCurrentAnswerCorrect; // Untuk menyimpan status jawaban
+
+  void _answerQuestion(int selectedIndex, bool isCorrect) {
+    setState(() {
+      _selectedIndex = selectedIndex;
+      _isCurrentAnswerCorrect = isCorrect; // Simpan apakah jawaban benar
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final question = _questions[_questionIndex];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kuis AI', style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        title: const Text('Kuis AI: Fisika Bab 4'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMultipleChoiceQuestion(context),
-            const SizedBox(height: 30),
-            _buildEssayQuestion(context),
-            const SizedBox(height: 40),
-             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Pertanyaan ${_questionIndex + 1}/${_questions.length}',
+                style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColor, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               ),
-              child: const Text('Selesai & Kembali ke Beranda'),
-            ),
-          ],
+              const SizedBox(height: 24),
+              _buildQuestionCard(theme, question['questionText']),
+              const SizedBox(height: 24),
+              ..._buildAnswerOptions(theme, question['answers']),
+              const SizedBox(height: 32),
+              _buildShowResultButton(theme), // Tombol diubah
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildMultipleChoiceQuestion(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '1. Siapakah penemu bola lampu?',
-          style: Theme.of(context).textTheme.titleLarge,
+  Widget _buildQuestionCard(ThemeData theme, String questionText) {
+    return Card(
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Text(
+          questionText,
+          style: theme.textTheme.headlineSmall,
+          textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 16),
-        RadioListTile(
-          title: const Text('Albert Einstein'),
-          value: 1,
-          groupValue: _selectedAnswer,
-          onChanged: (val) {
-            setState(() {
-              _selectedAnswer = val as int;
-            });
-          },
-        ),
-        RadioListTile(
-          title: const Text('Thomas Edison'),
-          value: 2,
-          groupValue: _selectedAnswer,
-          onChanged: (val) {
-            setState(() {
-              _selectedAnswer = val as int;
-            });
-          },
-        ),
-        RadioListTile(
-          title: const Text('Isaac Newton'),
-          value: 3,
-          groupValue: _selectedAnswer,
-          onChanged: (val) {
-            setState(() {
-              _selectedAnswer = val as int;
-            });
-          },
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _buildEssayQuestion(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '2. Jelaskan secara singkat proses fotosintesis!',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const SizedBox(height: 16),
-        const TextField(
-          maxLines: 5,
-          decoration: InputDecoration(
-            hintText: 'Tulis jawabanmu di sini...',
-            border: OutlineInputBorder(),
+  List<Widget> _buildAnswerOptions(ThemeData theme, List<Map<String, dynamic>> answers) {
+    return List.generate(answers.length, (index) {
+      final answer = answers[index];
+      bool isSelected = _selectedIndex == index;
+
+      Color? tileColor;
+      Icon? trailingIcon;
+
+      if (isSelected) {
+        if (answer['isCorrect']) {
+          tileColor = Colors.green.shade100;
+          trailingIcon = const Icon(Icons.check_circle, color: Colors.green);
+        } else {
+          tileColor = Colors.red.shade100;
+          trailingIcon = const Icon(Icons.cancel, color: Colors.red);
+        }
+      }
+
+      return Card(
+        margin: const EdgeInsets.symmetric(vertical: 6.0),
+        color: tileColor,
+        child: ListTile(
+          onTap: () => _answerQuestion(index, answer['isCorrect'] as bool),
+          leading: CircleAvatar(
+            backgroundColor: isSelected ? (answer['isCorrect'] ? Colors.green : Colors.red) : theme.primaryColor,
+            child: Text(
+              String.fromCharCode(65 + index),
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
+          title: Text(answer['text'], style: theme.textTheme.bodyLarge),
+          trailing: trailingIcon,
         ),
-      ],
+      );
+    });
+  }
+
+  // Nama dan fungsi widget diubah
+  Widget _buildShowResultButton(ThemeData theme) {
+    return ElevatedButton(
+      onPressed: _selectedIndex != null
+          ? () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizResultScreen(
+                    isCorrect: _isCurrentAnswerCorrect ?? false,
+                    totalQuestions: _questions.length,
+                  ),
+                ),
+              );
+            }
+          : null,
+      child: const Text('Lihat Hasil'), // Label diubah
+      style: theme.elevatedButtonTheme.style?.copyWith(
+        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 16)),
+      ),
     );
   }
 }
