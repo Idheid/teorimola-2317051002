@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
 
-  // Data tugas dummy yang sederhana
+  // Data tugas dummy untuk ditampilkan dalam timeline
   static const List<Map<String, dynamic>> _tasks = [
     {'time': '10:00', 'title': 'Belajar Kalkulus Lanjutan', 'isDone': true},
     {'time': '14:00', 'title': 'Membaca Bab 4 Fisika', 'isDone': false},
@@ -13,6 +13,8 @@ class ScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // Hitung jumlah tugas yang sudah selesai dan total tugas
     final completedTasks = _tasks.where((task) => task['isDone'] as bool).length;
     final totalTasks = _tasks.length;
 
@@ -23,34 +25,53 @@ class ScheduleScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(24.0),
         children: [
+          // Kartu ringkasan progres harian
           _buildProgressSummaryCard(theme, completedTasks, totalTasks),
           const SizedBox(height: 32),
+
+          // Judul untuk bagian timeline kegiatan
           Text(
             'Timeline Hari Ini',
             style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
+
+          // Daftar timeline tugas
           _buildTimeline(theme),
         ],
       ),
     );
   }
 
+  // Widget untuk menampilkan ringkasan progres dalam bentuk teks dan progress bar
   Widget _buildProgressSummaryCard(ThemeData theme, int completed, int total) {
     double progress = total > 0 ? completed / total : 0;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            // Baris judul dan informasi jumlah tugas selesai
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Progress Hari Ini', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-                Text('$completed/$total Selesai', style: theme.textTheme.titleMedium?.copyWith(color: theme.primaryColor, fontWeight: FontWeight.bold)),
+                Text(
+                  'Progress Hari Ini',
+                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  '$completed/$total Selesai',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
+
+            // Progress bar linear untuk menunjukkan persentase tugas selesai
             LinearProgressIndicator(
               value: progress,
               minHeight: 10,
@@ -64,6 +85,7 @@ class ScheduleScreen extends StatelessWidget {
     );
   }
 
+  // Widget untuk menampilkan daftar timeline tugas secara vertikal
   Widget _buildTimeline(ThemeData theme) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -77,6 +99,7 @@ class ScheduleScreen extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Bagian waktu di sebelah kiri
               SizedBox(
                 width: 60,
                 child: Text(
@@ -84,6 +107,8 @@ class ScheduleScreen extends StatelessWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
+
+              // Titik dan garis penghubung untuk timeline
               SizedBox(
                 width: 20,
                 child: Column(
@@ -99,20 +124,26 @@ class ScheduleScreen extends StatelessWidget {
                     Expanded(
                       child: Container(
                         width: 2,
-                        color: index == _tasks.length - 1 ? Colors.transparent : Colors.grey.shade300,
+                        color: index == _tasks.length - 1
+                            ? Colors.transparent
+                            : Colors.grey.shade300,
                       ),
                     ),
                   ],
                 ),
               ),
+
+              // Kartu tugas di sebelah kanan
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 12, left: 12),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDone ? theme.primaryColor.withOpacity(0.05) : Colors.white,
+                    color: isDone ? theme.primaryColor : Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: isDone ? theme.primaryColor.withOpacity(0.3) : Colors.grey.shade300),
+                    border: Border.all(
+                      color: isDone ? theme.primaryColor : Colors.grey.shade300,
+                    ),
                   ),
                   child: Text(
                     task['title'] as String,

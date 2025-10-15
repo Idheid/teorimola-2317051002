@@ -6,31 +6,32 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Theme.of(context); // Ambil tema untuk konsistensi gaya
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: const Text('Profil'), // Judul halaman profil
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         children: [
-          _buildProfileHeader(theme),
+          _buildProfileHeader(theme), // Bagian header profil (foto dan identitas)
           const SizedBox(height: 30),
-          _buildMenuList(context, theme),
+          _buildMenuList(context, theme), // Daftar menu navigasi profil
           const SizedBox(height: 40),
-          _buildLogoutButton(context, theme),
+          _buildLogoutButton(context, theme), // Tombol logout di bagian bawah
         ],
       ),
     );
   }
 
+  // Widget untuk header profil: avatar + nama + email
   Widget _buildProfileHeader(ThemeData theme) {
     return Row(
       children: [
         CircleAvatar(
           radius: 35,
-          backgroundColor: theme.primaryColor.withOpacity(0.1),
+          backgroundColor: theme.primaryColor,
           child: Icon(Icons.person_outline, size: 40, color: theme.primaryColor),
         ),
         const SizedBox(width: 20),
@@ -52,6 +53,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  // Widget untuk daftar menu profil (Pengaturan, Notifikasi, Bantuan, Tentang)
   Widget _buildMenuList(BuildContext context, ThemeData theme) {
     return Column(
       children: [
@@ -63,6 +65,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  // Widget untuk 1 item menu dengan ikon, judul, dan panah
   Widget _buildMenuCard(ThemeData theme, String title, IconData icon, VoidCallback onTap) {
     return Card(
       child: ListTile(
@@ -74,6 +77,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  // Widget untuk tombol logout, mengarahkan ke halaman login dan menghapus history route
   Widget _buildLogoutButton(BuildContext context, ThemeData theme) {
     return SizedBox(
       width: double.infinity,
@@ -93,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: BorderSide(color: Colors.red.withOpacity(0.2))
+                side: BorderSide(color: Colors.red)
             )
         ),
       ),

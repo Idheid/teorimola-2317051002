@@ -11,20 +11,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TEMA UTAMA APLIKASI
+    // Konfigurasi tema utama aplikasi Flutter
     final ThemeData theme = ThemeData(
       useMaterial3: true,
       primaryColor: const Color(0xFF3A82F8),
       scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+
+      // Skema warna utama aplikasi (primary, secondary, error)
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF3A82F8),
         primary: const Color(0xFF3A82F8),
         secondary: const Color(0xFF00BFA5),
-        background: const Color(0xFFF8F9FA),
         error: const Color(0xFFD32F2F),
       ),
 
-      // TEMA TEKS DENGAN GOOGLE FONTS
+      // Tema teks global dengan Google Fonts (Plus Jakarta Sans)
       textTheme: TextTheme(
         displayLarge: GoogleFonts.plusJakartaSans(fontSize: 57, fontWeight: FontWeight.bold),
         displayMedium: GoogleFonts.plusJakartaSans(fontSize: 45, fontWeight: FontWeight.bold),
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         labelSmall: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.bold),
       ),
 
-      // TEMA ELEVATED BUTTON
+      // Tema khusus untuk tombol ElevatedButton
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF3A82F8),
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      // TEMA INPUT DECORATION (UNTUK TEXTFIELD)
+      // Tema dekorasi input (TextField) untuk tampilan konsisten
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFFFFFFFF),
@@ -75,12 +76,12 @@ class MyApp extends StatelessWidget {
         hintStyle: GoogleFonts.plusJakartaSans(color: Colors.grey.shade500),
       ),
 
-      // TEMA APP BAR
+      // Tema AppBar (bagian atas halaman)
       appBarTheme: AppBarTheme(
         backgroundColor: const Color(0xFFF8F9FA),
         elevation: 0,
         scrolledUnderElevation: 1,
-        shadowColor: Colors.black.withOpacity(0.1),
+        shadowColor: Colors.black,
         iconTheme: const IconThemeData(color: Color(0xFF3A82F8)),
         titleTextStyle: GoogleFonts.plusJakartaSans(
           color: const Color(0xFF1D2939),
@@ -90,11 +91,12 @@ class MyApp extends StatelessWidget {
       ),
     );
 
+    // Struktur utama aplikasi
     return MaterialApp(
       title: 'Study Buddy',
-      theme: theme,
-      home: const LoginScreen(),
-      debugShowCheckedModeBanner: false,
+      theme: theme,                // Gunakan tema yang sudah didefinisikan
+      home: const LoginScreen(),   // Halaman pertama aplikasi (login)
+      debugShowCheckedModeBanner: false, // Hilangkan banner debug
     );
   }
 }

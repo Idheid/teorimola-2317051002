@@ -8,13 +8,13 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  // Data dummy untuk To-Do List
+  // Data dummy untuk To-Do List (sementara, sebelum ada integrasi data dinamis)
   final List<Map<String, dynamic>> _tasks = [
     {
       'title': 'Belajar Kalkulus Lanjutan',
       'dateTime': '25 Okt, 10:00',
       'target': 'Kerjakan soal no. 5-10',
-      'isDone': true,
+      'isDone': false,
     },
     {
       'title': 'Membaca Bab 4 Fisika',
@@ -42,8 +42,10 @@ class _NotesScreenState extends State<NotesScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        // Judul halaman
         title: const Text('Catatan Belajar'),
       ),
+      // List tugas ditampilkan menggunakan ListView.builder agar efisien
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         itemCount: _tasks.length,
@@ -52,24 +54,25 @@ class _NotesScreenState extends State<NotesScreen> {
           final isDone = task['isDone'] as bool;
 
           return Card(
-            // CardTheme diterapkan secara otomatis
+            // Tampilan tiap tugas dalam bentuk kartu
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
+                // Checkbox untuk menandai tugas selesai
                 leading: Transform.scale(
-                  scale: 1.2, // Membuat checkbox sedikit lebih besar
+                  scale: 1.2,
                   child: Checkbox(
                     value: isDone,
                     onChanged: (bool? value) {
                       if (value == true) {
-                        // Jeda singkat sebelum menghapus untuk efek visual
+                        // Jika dicentang, hapus tugas setelah jeda pendek untuk efek visual
                         Future.delayed(const Duration(milliseconds: 300), () {
                           setState(() {
                             _tasks.removeAt(index);
                           });
                         });
                       } else {
-                        // Jika di-uncheck, cukup update state (meskipun kasus ini jarang terjadi jika item langsung hilang)
+                        // Jika status dicabut, perbarui state
                         setState(() {
                           _tasks[index]['isDone'] = value!;
                         });
@@ -79,6 +82,7 @@ class _NotesScreenState extends State<NotesScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                   ),
                 ),
+                // Judul tugas, dicoret jika tugas sudah selesai
                 title: Text(
                   task['title'],
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -87,6 +91,7 @@ class _NotesScreenState extends State<NotesScreen> {
                     color: isDone ? Colors.grey.shade500 : theme.textTheme.titleMedium?.color,
                   ),
                 ),
+                // Target tugas ditampilkan sebagai subtitle dengan ikon
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Row(
@@ -103,6 +108,7 @@ class _NotesScreenState extends State<NotesScreen> {
                     ],
                   ),
                 ),
+                // Tanggal dan waktu tugas
                 trailing: Text(
                   task['dateTime'],
                   style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
@@ -112,12 +118,12 @@ class _NotesScreenState extends State<NotesScreen> {
           );
         },
       ),
+      // Tombol untuk menambahkan tugas baru (belum ada navigasi)
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Aksi untuk membuka halaman tambah tugas baru
         },
         child: const Icon(Icons.add),
-        // Gaya dari tema akan diterapkan secara otomatis
       ),
     );
   }

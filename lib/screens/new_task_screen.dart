@@ -1,50 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Halaman untuk membuat task baru (tugas/kegiatan), berisi form input judul, waktu, kategori, dan deskripsi
 class NewTaskScreen extends StatelessWidget {
   const NewTaskScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Theme.of(context); // Ambil tema aplikasi untuk konsistensi gaya
 
     return Scaffold(
       appBar: AppBar(
+        // Tombol kembali ke halaman sebelumnya
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('New Task'),
+        title: const Text('New Task'), // Judul halaman
         actions: [
+          // Tombol pencarian (belum diimplementasikan)
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {},
           ),
         ],
       ),
+      // Konten utama berupa form input yang dapat discroll
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Input judul tugas
             _buildTextField(label: 'Title', initialValue: 'UI Design'),
             const SizedBox(height: 20),
-            Text('Date', style: theme.textTheme.titleMedium?.copyWith(color: Colors.grey.shade600)),
+            // Label tanggal dan nilai tanggal statis (belum terhubung dengan date picker)
+            Text(
+              'Date',
+              style: theme.textTheme.titleMedium?.copyWith(color: Colors.grey.shade600),
+            ),
             const SizedBox(height: 8),
-            Text('Tuesday, 22 Sep 2020', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+            Text(
+              'Tuesday, 22 Sep 2020',
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 20),
+            // Baris untuk memilih waktu mulai dan waktu selesai
             Row(
               children: [
-                Expanded(child: _buildTimeField(context, label: 'Start Time', time: '1:00 PM')),
+                Expanded(
+                  child: _buildTimeField(context, label: 'Start Time', time: '1:00 PM'),
+                ),
                 const SizedBox(width: 20),
-                Expanded(child: _buildTimeField(context, label: 'End Time', time: '3:00 PM')),
+                Expanded(
+                  child: _buildTimeField(context, label: 'End Time', time: '3:00 PM'),
+                ),
               ],
             ),
             const SizedBox(height: 20),
-            _buildTextField(label: 'Description', initialValue: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', maxLines: 3),
+            // Input deskripsi tugas
+            _buildTextField(
+              label: 'Description',
+              initialValue: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+              maxLines: 3,
+            ),
             const SizedBox(height: 20),
+            // Pilihan kategori tugas dalam bentuk chip
             _buildCategorySection(theme),
             const SizedBox(height: 40),
+            // Tombol utama untuk membuat task baru
             _buildCreateTaskButton(theme),
           ],
         ),
@@ -52,6 +76,7 @@ class NewTaskScreen extends StatelessWidget {
     );
   }
 
+  // Komponen input teks serbaguna (judul dan deskripsi)
   Widget _buildTextField({required String label, required String initialValue, int maxLines = 1}) {
     return TextFormField(
       initialValue: initialValue,
@@ -65,10 +90,11 @@ class NewTaskScreen extends StatelessWidget {
         fillColor: Colors.grey.shade100,
         filled: true,
       ),
-      style: GoogleFonts.lato(),
+      style: GoogleFonts.lato(), // Gunakan font Lato untuk kesan modern dan rapi
     );
   }
 
+  // Komponen input waktu (start dan end time), sementara hanya tampilan statis
   Widget _buildTimeField(BuildContext context, {required String label, required String time}) {
     final theme = Theme.of(context);
     return Column(
@@ -78,7 +104,7 @@ class NewTaskScreen extends StatelessWidget {
         const SizedBox(height: 8),
         GestureDetector(
           onTap: () {
-            // Aksi untuk memilih waktu
+            // Tempat untuk menambahkan fungsi memilih waktu (mis. TimePicker)
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -99,6 +125,7 @@ class NewTaskScreen extends StatelessWidget {
     );
   }
 
+  // Bagian kategori tugas — menggunakan widget Chip untuk pilihan kategori
   Widget _buildCategorySection(ThemeData theme) {
     final List<String> categories = ['Meeting', 'UI Design', 'Dev', 'HTML', 'Android App', 'SEO'];
     return Column(
@@ -110,7 +137,12 @@ class NewTaskScreen extends StatelessWidget {
           spacing: 10.0,
           runSpacing: 10.0,
           children: categories.map((category) => Chip(
-            label: Text(category, style: GoogleFonts.lato(color: category == 'UI Design' ? Colors.white : theme.primaryColor)),
+            label: Text(
+              category,
+              style: GoogleFonts.lato(
+                color: category == 'UI Design' ? Colors.white : theme.primaryColor,
+              ),
+            ),
             backgroundColor: category == 'UI Design' ? theme.primaryColor : Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -123,18 +155,22 @@ class NewTaskScreen extends StatelessWidget {
     );
   }
 
+  // Tombol untuk mengonfirmasi pembuatan task baru
   Widget _buildCreateTaskButton(ThemeData theme) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            )
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
-        child: Text('New Task', style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold)),
+        child: Text(
+          'New Task',
+          style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

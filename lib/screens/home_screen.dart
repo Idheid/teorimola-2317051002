@@ -1,39 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/pomodoro_screen.dart';
-import 'package:myapp/screens/quiz_screen.dart'; // Impor QuizScreen
+import 'package:myapp/screens/quiz_screen.dart'; 
 
+// Halaman utama (home) aplikasi
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Theme.of(context); // Ambil tema aplikasi saat ini
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Beranda'),
         actions: [
+          // Tombol notifikasi di pojok kanan atas
           IconButton(
             icon: const Icon(Icons.notifications_none_rounded),
             onPressed: () {},
           ),
         ],
       ),
+      // Gunakan ListView agar halaman bisa di-scroll jika kontennya panjang
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         children: [
-          _buildWelcomeHeader(theme),
+          _buildWelcomeHeader(theme), // Bagian sapaan pengguna
           const SizedBox(height: 30),
-          _buildStatsSection(theme),
+          _buildStatsSection(theme), // Bagian statistik belajar
           const SizedBox(height: 30),
-          _buildLearningTechniques(context, theme),
+          _buildLearningTechniques(context, theme), // Bagian metode belajar
           const SizedBox(height: 30),
-          _buildTodaysSchedule(theme),
+          _buildTodaysSchedule(theme), // Bagian jadwal hari ini
         ],
       ),
     );
   }
 
+  // Komponen header sambutan pengguna
   Widget _buildWelcomeHeader(ThemeData theme) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,6 +48,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Komponen tampilan statistik belajar pengguna
   Widget _buildStatsSection(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,8 +57,10 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Row(
           children: [
+            // Card pertama: streak belajar
             Expanded(child: _buildStatCard(theme, '7 Hari', 'Streak Belajar', Icons.local_fire_department_rounded, theme.primaryColor)),
             const SizedBox(width: 16),
+            // Card kedua: rata-rata waktu belajar
             Expanded(child: _buildStatCard(theme, '45 Menit', 'Rata-rata/Hari', Icons.access_time_rounded, theme.primaryColor)),
           ],
         ),
@@ -61,6 +68,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Komponen individual untuk setiap card statistik
   Widget _buildStatCard(ThemeData theme, String value, String label, IconData icon, Color color) {
     return Card(
       child: Padding(
@@ -78,12 +86,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Komponen daftar teknik belajar yang bisa dipilih (misalnya Pomodoro, Quiz AI)
   Widget _buildLearningTechniques(BuildContext context, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Mulai Sesi Belajar', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 16),
+        // Tombol ke layar Pomodoro
         _buildTechniqueButton(
           theme,
           'Mode Pomodoro',
@@ -96,6 +106,7 @@ class HomeScreen extends StatelessWidget {
           },
         ),
         const SizedBox(height: 10),
+        // Tombol ke layar latihan AI (quiz)
         _buildTechniqueButton(
           theme,
           'Latihan dengan AI',
@@ -111,6 +122,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Komponen tombol teknik belajar (berbentuk card dengan ikon dan panah)
   Widget _buildTechniqueButton(ThemeData theme, String title, IconData icon, VoidCallback onPressed) {
     return Card(
       child: InkWell(
@@ -133,12 +145,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Komponen jadwal belajar pengguna untuk hari ini
   Widget _buildTodaysSchedule(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Jadwal Hari Ini', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 16),
+        // Contoh satu card jadwal kegiatan
         Card(
           child: ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -150,6 +164,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
+        // Tombol untuk melihat daftar jadwal lengkap
         Center(
           child: TextButton(onPressed: (){}, child: const Text('Lihat semua jadwal')),
         )

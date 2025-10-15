@@ -5,6 +5,7 @@ import 'package:myapp/screens/schedule_screen.dart';
 import 'package:myapp/screens/music_screen.dart';
 import 'package:myapp/screens/profile_screen.dart';
 
+// Halaman utama setelah login, berfungsi sebagai wadah navigasi utama dengan BottomNavigationBar
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -13,17 +14,18 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // Menyimpan indeks tab navigasi yang aktif
 
-  // Daftar widget screen dikembalikan ke kondisi semula
+  // Daftar halaman yang akan ditampilkan sesuai tab yang dipilih
   static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    NotesScreen(),
-    ScheduleScreen(),
-    MusicScreen(),
-    ProfileScreen(),
+    HomeScreen(),       // Tab Beranda
+    NotesScreen(),      // Tab Catatan
+    ScheduleScreen(),   // Tab Jadwal
+    MusicScreen(),      // Tab Musik
+    ProfileScreen(),    // Tab Profil
   ];
 
+  // Fungsi untuk mengganti tab yang aktif saat item navigasi ditekan
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -33,11 +35,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Body menampilkan halaman sesuai indeks navigasi yang aktif
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
+      // Navigasi bawah untuk berpindah antar halaman utama
       bottomNavigationBar: BottomNavigationBar(
-        // Item navigasi 'Fokus' dihapus
+        // Item menu navigasi utama aplikasi
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -60,12 +64,12 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Profil',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed, 
+        currentIndex: _selectedIndex, // Tab yang sedang aktif
+        selectedItemColor: Theme.of(context).primaryColor, // Warna tab aktif
+        unselectedItemColor: Colors.grey, // Warna tab tidak aktif
+        showUnselectedLabels: true, // Tampilkan label meskipun tidak aktif
+        onTap: _onItemTapped, // Aksi ketika item ditekan
+        type: BottomNavigationBarType.fixed, // Semua tab selalu terlihat (tidak bergeser)
       ),
     );
   }

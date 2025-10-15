@@ -8,8 +8,9 @@ class PomodoroScreen extends StatefulWidget {
 }
 
 class _PomodoroScreenState extends State<PomodoroScreen> {
-  // Untuk saat ini, ini adalah nilai statis. Logika timer akan ditambahkan nanti.
-  String _waktuTampilan = "25:00";
+  // Nilai sementara untuk tampilan waktu Pomodoro (belum ada logika hitung mundur)
+  final String _waktuTampilan = "25:00";
+  // Menandakan apakah sesi fokus sedang berjalan atau tidak
   bool _sesiAktif = false;
 
   @override
@@ -18,6 +19,7 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        // Judul halaman Pomodoro
         title: const Text('Sesi Fokus'),
       ),
       body: Center(
@@ -26,13 +28,17 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Tampilan utama hitungan waktu
               _buildTimerDisplay(theme),
               const SizedBox(height: 48),
+              // Tombol kontrol untuk mulai, jeda, reset, dan skip
               _buildControlButtons(theme),
               const SizedBox(height: 24),
+              // Penanda sesi fokus keberapa
               _buildSesiIndicator(theme),
               const SizedBox(height: 48),
-              _buildFinishSessionButton(context, theme), // Widget diganti namanya
+              // Tombol untuk mengakhiri sesi dan kembali ke halaman utama
+              _buildFinishSessionButton(context, theme),
             ],
           ),
         ),
@@ -40,6 +46,7 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     );
   }
 
+  // Bagian tampilan hitungan waktu + progress lingkaran
   Widget _buildTimerDisplay(ThemeData theme) {
     return SizedBox(
       width: 200,
@@ -47,12 +54,14 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
       child: Stack(
         fit: StackFit.expand,
         children: [
+          // Progress bar melingkar, masih nilai statis
           CircularProgressIndicator(
-            value: 0.75, // Nilai statis
+            value: 0.75,
             strokeWidth: 9,
             backgroundColor: Colors.grey.shade200,
             valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
           ),
+          // Teks waktu di tengah
           Center(
             child: Text(
               _waktuTampilan,
@@ -64,16 +73,19 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     );
   }
 
+  // Baris tombol kontrol: reset, play/pause, skip
   Widget _buildControlButtons(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Tombol reset waktu
         IconButton(
           icon: const Icon(Icons.refresh, size: 30),
           onPressed: () {},
           color: Colors.grey.shade500,
         ),
         const SizedBox(width: 20),
+        // Tombol mulai atau jeda sesi fokus
         ElevatedButton.icon(
           onPressed: () {
             setState(() {
@@ -83,11 +95,12 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
           icon: Icon(_sesiAktif ? Icons.pause_rounded : Icons.play_arrow_rounded, size: 32),
           label: Text(_sesiAktif ? 'Jeda' : 'Mulai'),
           style: theme.elevatedButtonTheme.style?.copyWith(
-            padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 40, vertical: 18)),
-            shape: MaterialStateProperty.all(const StadiumBorder()),
+            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 40, vertical: 18)),
+            shape: WidgetStateProperty.all(const StadiumBorder()),
           ),
         ),
         const SizedBox(width: 20),
+        // Tombol untuk skip ke sesi berikutnya
         IconButton(
           icon: const Icon(Icons.skip_next_rounded, size: 30),
           onPressed: () {},
@@ -97,12 +110,14 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     );
   }
 
+  // Tampilan label sesi aktif
   Widget _buildSesiIndicator(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-          color: theme.primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(20)),
+        color: theme.primaryColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Text(
         'Sesi Fokus #1',
         style: theme.textTheme.titleSmall
@@ -111,15 +126,12 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     );
   }
 
-  // Widget diubah untuk kembali ke dasbor
+  // Tombol untuk menyelesaikan sesi dan kembali ke halaman sebelumnya
   Widget _buildFinishSessionButton(BuildContext context, ThemeData theme) {
     return TextButton.icon(
-      // Ikon diubah
       icon: const Icon(Icons.check_circle_outline),
-      // Label diubah
       label: const Text('Selesai Sesi'),
       onPressed: () {
-        // Kembali ke layar sebelumnya (HomeScreen)
         Navigator.pop(context);
       },
       style: TextButton.styleFrom(
